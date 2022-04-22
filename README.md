@@ -42,7 +42,6 @@ Obs: as rotas em clientes, produtos e vendas só podem ser acessadas por usuári
 - as respostas devem ser em JSON;
 - pode usar recursos e bibliotecas que auxiliam na administração do banco de dados (Eloquent, Lucid, Knex, Bookshelf, etc.);
 - documentar as instruções necessárias em um README (requisitos, como rodar, detalhamento de rotas);
-- fazer um Pull Request para este repositório ao finalizar.
 
 Obs: caso o(a) candidato(a) não consiga completar o teste até o prazo combinado com o avaliador, deve garantir que tudo que foi efetivamente feito esteja em pleno funcionamento. Relatar no README quais foram as dificuldades encontradas.
 
