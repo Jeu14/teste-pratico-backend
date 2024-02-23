@@ -62,7 +62,7 @@ São requisitos básicos:
 
 Caso o(a) candidato(a) não consiga completar o teste até o prazo definido, deve garantir que tudo que foi construído esteja em funcionamento. Neste caso, relatar no README quais foram as dificuldades encontradas.
 
-## Critérios de Avaliação
+### Critérios de Avaliação
 Serão critérios para avaliação da solução fornecida:
 
 * lógica de programação;
