@@ -1,8 +1,8 @@
 # Teste Técnico Back-end BeTalent
 
-Este é um repositório para Testes Técnicos em Back-end da Be. Ele é destinado a pessoas que participam de nossos processos seletivos. 
+Este é um repositório para Testes Técnicos em Back-end da BeTalent. Ele é destinado a pessoas que participam de nossos processos seletivos. 
 
-Se você chegou até aqui por meio de um formulário de Teste Técnico, siga em frente. Caso contrário, acompanhe a Be no [Linkedin](https://br.linkedin.com/company/bemobiletech), [Instagram](https://www.instagram.com/bemobile.tech/), [Facebook](https://www.facebook.com/bemobile.tech) ou na nossa comunidade no [Telegram](https://t.me/be_tech_community). Divulgamos novos processos seletivos por lá.
+Se você chegou até aqui por meio de um formulário de Teste Técnico, siga em frente. Caso contrário, acompanhe a BeTalent no [Linkedin](https://www.linkedin.com/company/betalenttech), [Instagram](https://www.instagram.com/betalent.tech/), [Facebook](https://web.facebook.com/bemobile.tech) ou na nossa newsletter [BeTalent Academy]([https://t.me/be_tech_community](https://beacademy.substack.com/)). Divulgamos novos processos seletivos por lá.
 
 ## Desafio
 
