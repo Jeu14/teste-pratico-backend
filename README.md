@@ -1,4 +1,4 @@
-# Teste Técnico Back-end Be
+# Teste Técnico Back-end BeTalent
 
 Este é um repositório para Testes Técnicos em Back-end da Be. Ele é destinado a pessoas que participam de nossos processos seletivos. 
 
