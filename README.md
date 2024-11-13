@@ -19,6 +19,8 @@ Trata-se de um sistema gerenciador de pagamentos multi-gateway. Ao realizar uma 
 
 Deve ser levada em consideração a facilidade de adicionar novos gateways de forma simples e modular na API, no futuro.
 
+Você pode clonar este repositório em tela para facilitar o desenvolvimento.
+
 ### Frameworks aceitos
 - [Adonis](https://adonisjs.com/) 5 ou superior (Node.js)
 - [Laravel](https://laravel.com/) 10 ou superior (PHP)
@@ -112,7 +114,7 @@ O banco de dados deve ser estruturado à sua escolha, mas minimamente deve conte
 Para auxiliar no desenvolvimento, disponibilizamos:
 
 - esta [Collection](https://api.postman.com/collections/37798616-3e618a0f-a01b-4186-9b99-dec8d1affbb9?access_key=PMAT-01JCK3XCWSXX7JJ5Y6CK3GP0BK) para você usar no Postman, no Insomnia ou em outras ferramentas de sua preferência;
-- no arquivo [Multigateways_Payment_API.json](Multigateways_Payment_API.json), contido neste repositório.
+- no arquivo [multigateways_payment_api.json](https://github.com/BeMobile/desafio-back-end/blob/main/multigateways_payment_api.json), contido neste repositório.
 
 ### Rodando os Mocks
 
