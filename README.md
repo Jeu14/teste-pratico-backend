@@ -33,12 +33,12 @@ Escolha esse nível se você se considera iniciante ou júnior, por exemplo:
 - Gateways sem autenticação
 
 ### Nível 2
-Escolha esse nível se você é um júnior com experiência ou pleno, por exemplo:
+Escolha esse nível se você é júnior experiente ou pleno, por exemplo:
 - Valor da compra vem do produto e suas quantidades calculada via back
 - Gateways com autenticação
 
 ### Nível 3
-Escolha esse nível se você é um pleno ou sênior, por exemplo:
+Escolha esse nível se você é pleno ou sênior, por exemplo:
 - Valor da compra vem de múltiplos produtos e suas quantidades selecionadas e calculada via back
 - Gateways com autenticação
 - Usuários tem roles:
