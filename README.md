@@ -19,7 +19,7 @@ Trata-se de um sistema gerenciador de pagamentos multi-gateway. Ao realizar uma 
 
 Deve ser levada em consideração a facilidade de adicionar novos gateways de forma simples e modular na API, no futuro.
 
-Você pode clonar este repositório em tela para facilitar o desenvolvimento.
+Você pode clonar este repositório para facilitar o desenvolvimento.
 
 ### Frameworks aceitos
 - [Adonis](https://adonisjs.com/) 5 ou superior (Node.js)
