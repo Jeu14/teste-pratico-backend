@@ -1,0 +1,63 @@
+services:
+  app:
+    image: node:20
+    container_name: payment-app
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3333:3333"
+    command: bash -c "npm install && node ace serve --watch"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3333
+      - APP_KEY=security_key_here 
+      - NODE_ENV=development
+      - DB_CONNECTION=mysql
+      - MYSQL_HOST=database
+      - MYSQL_PORT=3306
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=123456
+      - MYSQL_DB_NAME=payment_system
+
+  database:
+    image: mysql:8
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: payment_system
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_PASSWORD_PLUGIN: mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gateway1:
+    image: matheusprotzen/gateways-mock
+    container_name: gateway-1
+    ports:
+      - "3001:3001"
+    environment:
+      - REMOVE_AUTH=false
+
+  gateway2:
+    image: matheusprotzen/gateways-mock
+    container_name: gateway-2
+    ports:
+      - "3002:3002"
+    environment:
+      - REMOVE_AUTH=false
+
+volumes:
+  db-data:
