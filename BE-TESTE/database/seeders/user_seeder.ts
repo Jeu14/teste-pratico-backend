@@ -4,7 +4,7 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class UserSeeder extends BaseSeeder {
   async run() {
-    await User.create({
+    await User.firstOrCreate({
       name: env.get('ADMIN_USERNAME'),
       email: env.get('ADMIN_EMAIL'),
       password: env.get('ADMIN_PASSWORD'),

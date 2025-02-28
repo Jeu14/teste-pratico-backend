@@ -8,8 +8,6 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('client_id').unsigned().references('id').inTable('clients').onDelete('CASCADE')
       table.integer('gateway_id').unsigned().references('id').inTable('gateways').onDelete('SET NULL')
-      table.integer('product_id').unsigned().references('id').inTable('products').onDelete('CASCADE')
-      table.integer('quantity').notNullable()
       table.string('external_id')
       table.enum('status', ['PENDING', 'SUCCESS', 'FAILED']).notNullable()
       table.integer('amount').notNullable()
