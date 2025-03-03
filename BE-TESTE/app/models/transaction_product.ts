@@ -18,10 +18,10 @@ export default class TransactionProduct extends BaseModel {
   @column()
   declare quantity: number
 
-  @belongsTo(() => Transaction)
+  @belongsTo(() => Transaction, { foreignKey: 'transaction_id' })
   declare transaction: BelongsTo<typeof Transaction>
 
-  @belongsTo(() => Product)
+  @belongsTo(() => Product, { foreignKey: 'product_id' })
   declare product: BelongsTo<typeof Product>
 
   @column.dateTime({ autoCreate: true })

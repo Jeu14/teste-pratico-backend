@@ -14,7 +14,7 @@ export default class Client extends BaseModel {
   @column()
   declare email: string
 
-  @hasMany(() => Transaction)
+  @hasMany(() => Transaction, { foreignKey: 'client_id' })
   declare transactions: HasMany<typeof Transaction>
 
   @column.dateTime({ autoCreate: true })

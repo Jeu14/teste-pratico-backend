@@ -4,6 +4,7 @@ const PurchasesController = () => import('#controllers/purchases_controller')
 const GatewaysController = () => import('#controllers/gateways_controller')
 const UsersController = () => import('#controllers/users_controller')
 const ProductsController = () => import('#controllers/products_controller')
+const ClientsController = () => import('#controllers/clients_controller')
 
 import { middleware } from './kernel.js'
 
@@ -47,3 +48,8 @@ router
     router.delete('/products/:id', [ProductsController, 'destroy'])
   })
   .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER', 'FINANCE'])])
+
+router.group(() => {
+  router.get('/clients', [ClientsController, 'index'])
+  router.get('/clients/:id', [ClientsController, 'show'])
+}).use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])])

@@ -28,13 +28,13 @@ export default class Transaction extends BaseModel {
   @column()
   declare card_last_numbers: string
 
-  @belongsTo(() => Client)
+  @belongsTo(() => Client, { foreignKey: 'client_id' })
   declare client: BelongsTo<typeof Client>
 
-  @belongsTo(() => Gateway)
+  @belongsTo(() => Gateway, { foreignKey: 'gateway_id' })
   declare gateway: BelongsTo<typeof Gateway>
 
-  @hasMany(() => TransactionProduct)
+  @hasMany(() => TransactionProduct, { foreignKey: 'transaction_id' })
   declare transactionProducts: HasMany<typeof TransactionProduct>
 
   @column.dateTime({ autoCreate: true })
