@@ -1,7 +1,9 @@
 import vine from '@vinejs/vine'
 
-const updateGatewayStatusSchema = vine.object({
+export const updateGatewayStatusSchema = vine.object({
   is_active: vine.boolean(),
 })
 
-export default updateGatewayStatusSchema
+export const updateGatewayPrioritySchema = vine.object({
+  priority: vine.number().min(1),
+})

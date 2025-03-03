@@ -19,5 +19,6 @@ router.group(() => {
 })
 
 router.group(() => {
-  router.put('/gateway/:id', [GatewaysController, 'updateStatus'])
+  router.put('/gateway/status/:id', [GatewaysController, 'updateStatus'])
+  router.put('/gateway/priority/:id', [GatewaysController, 'updatePriority'])
 }).use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN'])])
