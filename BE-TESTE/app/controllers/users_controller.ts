@@ -1,4 +1,4 @@
-import BaseController from '#controllers/users/UserBaseController'
+import BaseController from '#controllers/BaseController'
 import User from '#models/user'
 
 import type { HttpContext } from '@adonisjs/core/http'
@@ -11,7 +11,7 @@ export default class UsersController extends BaseController {
   }
 
   public async show({ params, response }: HttpContext) {
-    const user = await this.getUser(params.id, response)
+    const user = await this.getResource(User, params.id, response)
     if (!user) return
     return response.status(200).json({ user })
   }
@@ -26,7 +26,7 @@ export default class UsersController extends BaseController {
   }
 
   public async update({ params, request, response }: HttpContext) {
-    const user = await this.getUser(params.id, response)
+    const user = await this.getResource(User, params.id, response)
     if (!user) return
 
     const data = request.only(['name', 'email', 'password', 'role'])
@@ -39,7 +39,7 @@ export default class UsersController extends BaseController {
   }
 
   public async destroy({ params, response }: HttpContext) {
-    const user = await this.getUser(params.id, response)
+    const user = await this.getResource(User, params.id, response)
     if (!user) return
 
     await user.delete()

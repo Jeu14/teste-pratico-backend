@@ -2,7 +2,8 @@ import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const PurchasesController = () => import('#controllers/purchases_controller')
 const GatewaysController = () => import('#controllers/gateways_controller')
-const UsersController = () => import('#controllers/users/users_controller')
+const UsersController = () => import('#controllers/users_controller')
+const ProductsController = () => import('#controllers/products_controller')
 
 import { middleware } from './kernel.js'
 
@@ -36,3 +37,13 @@ router
     router.delete('/users/:id', [UsersController, 'destroy'])
   })
   .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER'])])
+
+router
+  .group(() => {
+    router.get('/products', [ProductsController, 'index'])
+    router.get('/products/:id', [ProductsController, 'show'])
+    router.post('/products', [ProductsController, 'store'])
+    router.put('/products/:id', [ProductsController, 'update'])
+    router.delete('/products/:id', [ProductsController, 'destroy'])
+  })
+  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER', 'FINANCE'])])
