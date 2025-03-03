@@ -1,7 +1,9 @@
-const AuthController = () => import('#controllers/auth_controller')
-const PurchasesController = () => import ('#controllers/purchases_controller')
-const GatewaysController = () => import ('#controllers/gateways_controller')
 import router from '@adonisjs/core/services/router'
+const AuthController = () => import('#controllers/auth_controller')
+const PurchasesController = () => import('#controllers/purchases_controller')
+const GatewaysController = () => import('#controllers/gateways_controller')
+const UsersController = () => import('#controllers/users/users_controller')
+
 import { middleware } from './kernel.js'
 
 router.get('/', async () => {
@@ -18,7 +20,19 @@ router.group(() => {
   router.post('/transactions', [PurchasesController, 'store'])
 })
 
-router.group(() => {
-  router.put('/gateway/status/:id', [GatewaysController, 'updateStatus'])
-  router.put('/gateway/priority/:id', [GatewaysController, 'updatePriority'])
-}).use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN'])])
+router
+  .group(() => {
+    router.put('/gateway/status/:id', [GatewaysController, 'updateStatus'])
+    router.put('/gateway/priority/:id', [GatewaysController, 'updatePriority'])
+  })
+  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN'])])
+
+router
+  .group(() => {
+    router.get('/users', [UsersController, 'index'])
+    router.get('/users/:id', [UsersController, 'show'])
+    router.post('/users', [UsersController, 'store'])
+    router.put('/users/:id', [UsersController, 'update'])
+    router.delete('/users/:id', [UsersController, 'destroy'])
+  })
+  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER'])])
