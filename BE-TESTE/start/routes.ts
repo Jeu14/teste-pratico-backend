@@ -5,6 +5,7 @@ const GatewaysController = () => import('#controllers/gateways_controller')
 const UsersController = () => import('#controllers/users_controller')
 const ProductsController = () => import('#controllers/products_controller')
 const ClientsController = () => import('#controllers/clients_controller')
+const TransactionsController = () => import('#controllers/transactions_controller')
 
 import { middleware } from './kernel.js'
 
@@ -49,7 +50,11 @@ router
   })
   .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER', 'FINANCE'])])
 
-router.group(() => {
-  router.get('/clients', [ClientsController, 'index'])
-  router.get('/clients/:id', [ClientsController, 'show'])
-}).use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])])
+router
+  .group(() => {
+    router.get('/clients', [ClientsController, 'index'])
+    router.get('/clients/:id', [ClientsController, 'show'])
+    router.get('/transactions', [TransactionsController, 'index'])
+    router.get('/transactions/:id', [TransactionsController, 'show'])
+  })
+  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])])
