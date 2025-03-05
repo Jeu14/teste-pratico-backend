@@ -9,13 +9,12 @@ const TransactionsController = () => import('#controllers/transactions_controlle
 
 import { middleware } from './kernel.js'
 
-router.group(() => {
-  router.post('/login', [AuthController, 'login'])
-})
+router.post('/login', [AuthController, 'login'])
+router.post('/transactions', [PurchasesController, 'store'])
 
-router.group(() => {
-  router.post('/transactions', [PurchasesController, 'store'])
-})
+router
+  .post('/transactions/:id/charge_back', [TransactionsController, 'chargeBack'])
+  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'FINANCE'])])
 
 router
   .group(() => {
@@ -25,36 +24,30 @@ router
   .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN'])])
 
 router
-  .group(() => {
-    router.get('/users', [UsersController, 'index'])
-    router.get('/users/:id', [UsersController, 'show'])
-    router.post('/users', [UsersController, 'store'])
-    router.put('/users/:id', [UsersController, 'update'])
-    router.delete('/users/:id', [UsersController, 'destroy'])
-  })
-  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER'])])
+  .resource('/users', UsersController)
+  .apiOnly()
+  .use('*', [middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER'])])
 
 router
-  .group(() => {
-    router.get('/products', [ProductsController, 'index'])
-    router.get('/products/:id', [ProductsController, 'show'])
-    router.post('/products', [ProductsController, 'store'])
-    router.put('/products/:id', [ProductsController, 'update'])
-    router.delete('/products/:id', [ProductsController, 'destroy'])
-  })
-  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'MANAGER', 'FINANCE'])])
+  .resource('/products', ProductsController)
+  .apiOnly()
+  .use('*', [
+    middleware.auth({ guards: ['api'] }),
+    middleware.role(['ADMIN', 'MANAGER', 'FINANCE']),
+  ])
 
 router
-  .group(() => {
-    router.get('/clients', [ClientsController, 'index'])
-    router.get('/clients/:id', [ClientsController, 'show'])
-    router.get('/transactions', [TransactionsController, 'index'])
-    router.get('/transactions/:id', [TransactionsController, 'show'])
-  })
-  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])])
+  .resource('/clients', ClientsController)
+  .only(['index', 'show'])
+  .use(
+    ['index', 'show'],
+    [middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])]
+  )
 
 router
-  .group(() => {
-    router.post('/transactions/:id/charge_back', [TransactionsController, 'chargeBack'])
-  })
-  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'FINANCE'])])
+  .resource('/transactions', TransactionsController)
+  .only(['index', 'show'])
+  .use(
+    ['index', 'show'],
+    [middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])]
+  )
