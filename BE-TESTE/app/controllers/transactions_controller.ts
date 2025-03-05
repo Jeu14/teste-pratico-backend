@@ -1,4 +1,6 @@
 import Transaction from '#models/transaction'
+import PaymentService from '#services/payment_service'
+
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TransactionsController {
@@ -94,5 +96,31 @@ export default class TransactionsController {
     }
 
     return response.status(200).json({ transaction: transformed })
+  }
+  
+  public async chargeBack({ params, response }: HttpContext) {
+    const transactionId = params.id
+
+    const transaction = await Transaction.find(transactionId)
+    if (!transaction) {
+      return response.status(404).json({ message: 'Purchase not found' })
+    }
+
+    if (transaction.status !== 'SUCCESS') {
+      return response.status(400).json({ message: 'Only successful transactions can be chargedback' })
+    }
+
+    try {
+      const chargeBackResult = await PaymentService.chargeBackPayment(transaction)
+      if (chargeBackResult.success) {
+        transaction.status = 'CHARGED_BACK'
+        await transaction.save()
+        return response.status(200).json({ message: 'Chargeback successful', transaction })
+      } else {
+        return response.status(400).json({ message: 'Failed to process chargeback', details: chargeBackResult.error })
+      }
+    } catch (error: any) {
+      return response.status(500).json({ message: 'Error connecting to gateway', error: error.message })
+    }
   }
 }

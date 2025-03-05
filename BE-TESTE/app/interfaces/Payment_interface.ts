@@ -11,3 +11,9 @@ export interface PaymentResult {
   externalId: string | null
   success: boolean
 }
+
+export interface ChargeBackResult {
+  success: boolean
+  gatewayId?: number
+  error?: string
+}

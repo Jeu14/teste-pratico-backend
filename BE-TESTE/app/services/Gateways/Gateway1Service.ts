@@ -1,5 +1,6 @@
 import axios from 'axios'
 import env from '#start/env'
+import Transaction from '#models/transaction'
 
 import { createTransactionGateway1 } from '../../interfaces/Transaction_interface.js'
 
@@ -38,5 +39,20 @@ export default class Gateway1Service {
     )
 
     return transactionResponse.data
+  }
+
+  public static async chargeBack(
+    transaction: Transaction
+  ): Promise<{ success: boolean; gatewayId: number }> {
+    const token = await this.login()
+    const response = await axios.post(
+      `${GATEWAY1_URL}/transactions/${transaction.external_id}/charge_back`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    if (response.data.error) {
+      throw new Error(response.data.error)
+    }
+    return { success: true, gatewayId: 1 }
   }
 }

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import env from '#start/env'
+import Transaction from '#models/transaction'
 
 import { createTransactionGateway2 } from '../../interfaces/Transaction_interface.js'
 
@@ -26,5 +27,24 @@ export default class Gateway2Service {
       }
     )
     return transactionResponse.data
+  }
+
+  public static async chargeBack(
+    transaction: Transaction
+  ): Promise<{ success: boolean; gatewayId: number }> {
+    const response = await axios.post(
+      `${GATEWAY2_URL}/transacoes/reembolso`,
+      { id: transaction.external_id },
+      {
+        headers: {
+          'Gateway-Auth-Token': GATEWAY2_AUTH_TOKEN,
+          'Gateway-Auth-Secret': GATEWAY2_AUTH_SECRET,
+        },
+      }
+    )
+    if (response.data.error) {
+      throw new Error(response.data.error)
+    }
+    return { success: true, gatewayId: 2 }
   }
 }

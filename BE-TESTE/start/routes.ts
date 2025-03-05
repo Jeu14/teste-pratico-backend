@@ -9,12 +9,6 @@ const TransactionsController = () => import('#controllers/transactions_controlle
 
 import { middleware } from './kernel.js'
 
-router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
-})
-
 router.group(() => {
   router.post('/login', [AuthController, 'login'])
 })
@@ -58,3 +52,9 @@ router
     router.get('/transactions/:id', [TransactionsController, 'show'])
   })
   .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'USER'])])
+
+router
+  .group(() => {
+    router.post('/transactions/:id/charge_back', [TransactionsController, 'chargeBack'])
+  })
+  .use([middleware.auth({ guards: ['api'] }), middleware.role(['ADMIN', 'FINANCE'])])
