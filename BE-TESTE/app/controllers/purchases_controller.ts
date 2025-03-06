@@ -11,14 +11,7 @@ import { PaymentResult } from '../interfaces/Payment_interface.js'
 
 export default class PurchasesController {
   public async store({ request, response }: HttpContext) {
-    const data = request.only([
-      'clientName',
-      'clientEmail',
-      'productId',
-      'quantity',
-      'cardNumber',
-      'cvv',
-    ])
+    const data = request.only(['clientName', 'clientEmail', 'products', 'cardNumber', 'cvv'])
 
     try {
       await vine.validate({ schema: PurchaseValidator, data })
@@ -26,31 +19,36 @@ export default class PurchasesController {
       return response.status(422).json({ errors })
     }
 
-    const product = await Product.find(data.productId)
-    if (!product) {
-      return response.status(404).json({ message: 'Product not found' })
+    let client = await Client.findBy('email', data.clientEmail)
+    if (!client) {
+      client = await Client.create({ name: data.clientName, email: data.clientEmail })
     }
 
-    const amount = product.amount * data.quantity
+    let totalAmount = 0
+    const items = []
+
+    for (const item of data.products) {
+      const product = await Product.find(item.id)
+      if (!product) {
+        return response.status(404).json({ message: `Product with id ${item.id} not found` })
+      }
+      totalAmount += product.amount * item.quantity
+      items.push({ product_id: product.id, quantity: item.quantity })
+    }
 
     let paymentResult: PaymentResult
     try {
       paymentResult = await PaymentService.processPayment({
-        amount,
+        amount: totalAmount,
         cardNumber: data.cardNumber,
         cvv: data.cvv,
         name: data.clientName,
         email: data.clientEmail,
       })
     } catch (error: any) {
-      return response.status(500).json({
+      return response.status(400).json({
         message: 'An error occurred while processing the payment. Please try again later.',
       })
-    }
-
-    let client = await Client.findBy('email', data.clientEmail)
-    if (!client) {
-      client = await Client.create({ name: data.clientName, email: data.clientEmail })
     }
 
     const transaction = await Transaction.create({
@@ -58,15 +56,17 @@ export default class PurchasesController {
       gateway_id: paymentResult.gatewayId,
       external_id: paymentResult.externalId || '',
       status: paymentResult.success ? 'SUCCESS' : 'FAILED',
-      amount,
+      amount: totalAmount,
       card_last_numbers: data.cardNumber.slice(-4),
     })
 
-    await TransactionProduct.create({
-      transaction_id: transaction.id,
-      product_id: product.id,
-      quantity: data.quantity,
-    })
+    for (const item of items) {
+      await TransactionProduct.create({
+        transaction_id: transaction.id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+      })
+    }
 
     if (!paymentResult.success) {
       return response.status(400).json({
@@ -74,6 +74,9 @@ export default class PurchasesController {
       })
     }
 
-    return response.status(200).json({ message: 'Purchase processed successfully', transaction })
+    return response.status(200).json({
+      message: 'Purchase processed successfully',
+      transaction,
+    })
   }
 }

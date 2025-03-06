@@ -24,4 +24,27 @@ export default class BaseController {
     }
     return resource
   }
+
+  protected async updateField(
+    resource: InstanceType<typeof BaseModel>,
+    field: string,
+    value: any,
+    response: HttpContext['response'],
+    successMessage: string,
+    responseKey: string = 'resource'
+  ) {
+    try {
+      ;(resource as any)[field] = value
+      await resource.save()
+      return response.status(200).json({
+        message: successMessage,
+        [responseKey]: resource,
+      })
+    } catch (error: any) {
+      return response.status(500).json({
+        message: `Error updating ${field}`,
+        error: error.message,
+      })
+    }
+  }
 }
