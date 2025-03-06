@@ -1,20 +1,18 @@
 services:
   app:
-    image: node:20
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: payment-app
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
     ports:
-      - "3333:3333"
-    command: bash -c "npm install && node ace serve --watch"
-    depends_on:
-      database:
-        condition: service_healthy
+      - '3333:3333'
     environment:
       - HOST=0.0.0.0
       - PORT=3333
-      - APP_KEY=security_key_here 
+      - APP_KEY=your_generated_app_key
       - NODE_ENV=development
       - DB_CONNECTION=mysql
       - MYSQL_HOST=database
@@ -22,23 +20,27 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=123456
       - MYSQL_DB_NAME=payment_system
+      - GATEWAY1_URL=http://gateway-1:3001
+      - GATEWAY2_URL=http://gateway-2:3002
+    depends_on:
+      database:
+        condition: service_healthy
 
   database:
     image: mysql:8
     container_name: mysql-db
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: payment_system
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456
       MYSQL_ROOT_HOST: '%'
-      MYSQL_PASSWORD_PLUGIN: mysql_native_password
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,7 +49,7 @@ services:
     image: matheusprotzen/gateways-mock
     container_name: gateway-1
     ports:
-      - "3001:3001"
+      - '3001:3001'
     environment:
       - REMOVE_AUTH=false
 
@@ -55,7 +57,7 @@ services:
     image: matheusprotzen/gateways-mock
     container_name: gateway-2
     ports:
-      - "3002:3002"
+      - '3002:3002'
     environment:
       - REMOVE_AUTH=false
 
