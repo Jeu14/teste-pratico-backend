@@ -1,6 +1,30 @@
-A aplicação ficará disponível em http://localhost:3333.
+# Resolução do Teste Prático Back-end BeTalent
 
-### Login
+## Instruções de como rodar e testar o projeto
+
+### `ATENÇÃO: Não esqueça de remover a extensão (.example) do arquivo (.env). É nele que estão  as variavéis de ambiente necessárias para a aplicação se conectar ao banco de dados.`
+
+- #### Após baixar o projeto em sua máquina, abra o terminal e navegue até a pasta **BE-TESTE**. Em seguida, execute o comando abaixo:
+
+```bash
+ docker compose up --build
+```
+- #### A execução deste comando resultará na construção (ou reconstrução) das imagens, configuração e criação dos containers para cada serviço definido, comunicação entre esses serviços e a execução das tarefas de inicialização presentes no entrypoint (execução das migrations e seeders, e inicia o server com live reload)
+
+### **A aplicação ficará disponível em http://localhost:3333.**
+
+## OBSERVAÇÕES: 
+### - No endpoint de cadastro de compra, até mesmo as compras que falharem nos dois gateways serão registradas, com status de falha, obviamente. Essa escolha foi feita visando facilitar a obtenção de históricos dos clientes e possíveis auditorias.
+
+### - Nos endpoints detalhamento de cliente e listagem de compras existem filtros de acordo com o status (SUCCESS ou FAILED), no parâmetro de rota. Caso nenhum filtro seja passado, todos os recursos serão retornados
+
+## Logo abaixo estão alguns exemplos de requisições que podem ser feitas nas rotas presentes no projeto.
+
+### `ATENÇÃO: Caso opte por não criar as rotas manualmente, basta copiar o arquivo (insomnia.json) e importá-lo no insomnia. Nele contém todas as rotas e exemplos de requisição.`
+
+## **Endpoints**
+
+### **Login**
 
 ```http
 POST /login
@@ -26,7 +50,7 @@ HTTP Status 200
 }
 ```
 
-### Realizar uma compra informando o produto
+### **Realizar uma compra informando o produto**
 
 ```http
 POST /transactions
@@ -34,12 +58,20 @@ POST /transactions
 
 ```json
 {
-  "clientName": "client",
-  "clientEmail": "client@email.com",
-  "productId": 1,
-  "quantity": 2,
-  "cardNumber": "5569000000006063",
-  "cvv": "010"
+	"clientName": "client",
+	"clientEmail": "client@email.com",
+	"products": [
+		{
+			"id": 1,
+			"quantity": 2
+		},
+		{
+			"id": 2,
+			"quantity": 1
+		}
+	],
+	"cardNumber": "5569000000006063",
+	"cvv": "010"
 }
 ```
 
@@ -57,7 +89,7 @@ HTTP Status 200
     "gatewayId": 1,
     "externalId": "cafb468b-3289-48b8-86c6-40280ee30bf0",
     "status": "SUCCESS",
-    "amount": 2000,
+    "amount": 7000,
     "cardLastNumbers": "6063",
     "createdAt": "2025-03-06T03:10:32.660+00:00",
     "updatedAt": "2025-03-06T03:10:32.660+00:00",
@@ -68,7 +100,7 @@ HTTP Status 200
 
 ## **ATENÇÃO**: Todas as funcionalidades (endpoints) a seguir, a partir desse ponto, exigem o token de autenticação do usuário logado, recebido no header com o formato Bearer Token.
 
-### Ativar/desativar um gateway
+### **Ativar/desativar um gateway**
 
 ```http
 PUT /gateway/status/:id
@@ -100,7 +132,7 @@ HTTP Status 200
 }
 ```
 
-### Alterar a prioridade de um gateway
+### **Alterar a prioridade de um gateway**
 
 ```http
 PUT /gateway/priority/:id
@@ -132,7 +164,7 @@ HTTP Status 200
 }
 ```
 
-### Registrar novo usuário
+### **Registrar novo usuário**
 
 ```http
 POST /users
@@ -167,7 +199,7 @@ HTTP Status 200
 }
 ```
 
-### Atualizar dados de um usuário existente
+### **Atualizar dados de um usuário existente**
 
 ```http
 PUT /users/:id
@@ -202,7 +234,7 @@ HTTP Status 200
 }
 ```
 
-### Detalhar um usuário
+### **Detalhar um usuário**
 
 ```http
 GET /users/:id
@@ -231,7 +263,7 @@ HTTP Status 200
 }
 ```
 
-### Listar todos os usuários
+### **Listar todos os usuários**
 
 ```http
 GET /users
@@ -270,7 +302,7 @@ HTTP Status 200
 }
 ```
 
-### Deletar um usuário
+### **Deletar um usuário**
 
 ```http
 DELETE /users/:id
@@ -292,7 +324,7 @@ HTTP Status 200
 }
 ```
 
-### Registrar novo produto
+### **Registrar novo produto**
 
 ```http
 POST /products
@@ -324,7 +356,7 @@ HTTP Status 200
 }
 ```
 
-### Atualizar dados de um produto existente
+### **Atualizar dados de um produto existente**
 
 ```http
 PUT /products/:id
@@ -356,7 +388,7 @@ HTTP Status 200
 }
 ```
 
-### Detalhar um produto
+### **Detalhar um produto**
 
 ```http
 GET /products/:id
@@ -384,7 +416,7 @@ HTTP Status 200
 }
 ```
 
-### Listar todos os produtos
+### **Listar todos os produtos**
 
 ```http
 GET /products
@@ -414,7 +446,7 @@ HTTP Status 200
 }
 ```
 
-### Deletar um produto
+### **Deletar um produto**
 
 ```http
 DELETE /products/:id
@@ -436,7 +468,7 @@ HTTP Status 200
 }
 ```
 
-### Listar todos os clientes
+### **Listar todos os clientes**
 
 ```http
 GET /clients
@@ -466,7 +498,7 @@ HTTP Status 200
 }
 ```
 
-### Detalhar um cliente e todas as suas compras
+### **Detalhar um cliente e todas as suas compras**
 
 ```http
 GET /clients/:id
@@ -521,7 +553,7 @@ HTTP Status 200
 }
 ```
 
-### Listar todas as compras
+### **Listar todas as compras**
 
 ```http
 GET /transactions
@@ -578,7 +610,7 @@ HTTP Status 200
 }
 ```
 
-### Detalhar uma compra
+### **Detalhar uma compra**
 
 ```http
 GET /transactions/:id
@@ -623,7 +655,7 @@ HTTP Status 200
 }
 ```
 
-### Reembolso de uma compra
+### **Reembolso de uma compra**
 
 ```http
 POST /transactions/:id/charge_back
