@@ -55,11 +55,14 @@
     "@adonisjs/core": "^6.17.2",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.6.0",
+    "@types/supertest": "^6.0.2",
     "@vinejs/vine": "^3.0.0",
     "axios": "^1.8.1",
+    "japa": "^4.0.0",
     "luxon": "^3.5.0",
     "mysql2": "^3.12.0",
     "reflect-metadata": "^0.2.2",
+    "supertest": "^7.0.0",
     "vine": "^0.1.1"
   },
   "hotHook": {
