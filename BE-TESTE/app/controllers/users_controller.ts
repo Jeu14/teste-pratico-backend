@@ -18,6 +18,11 @@ export default class UsersController extends BaseController {
 
   public async store({ request, response }: HttpContext) {
     const data = request.only(['name', 'email', 'password', 'role'])
+
+    if (await this.checkIfExists(User, 'email', data.email, response)) {
+      return
+    }
+
     const validatedData = await this.validateData(createUserSchema, data, response)
     if (!validatedData) return
 
@@ -26,10 +31,22 @@ export default class UsersController extends BaseController {
   }
 
   public async update({ params, request, response }: HttpContext) {
-    const user = await this.getResource(User, params.id, response)
+    const user = (await this.getResource(User, params.id, response)) as User
     if (!user) return
 
+    if (this.checkIfAdmin(user, response)) {
+      return
+    }
+
     const data = request.only(['name', 'email', 'password', 'role'])
+
+    if (data.email && data.email !== user.email) {
+      const exists = await User.query().where('email', data.email).whereNot('id', user.id).first()
+      if (exists) {
+        return response.status(409).json({ message: 'Email already exists' })
+      }
+    }
+
     const validatedData = await this.validateData(updateUserSchema, data, response)
     if (!validatedData) return
 
@@ -39,8 +56,12 @@ export default class UsersController extends BaseController {
   }
 
   public async destroy({ params, response }: HttpContext) {
-    const user = await this.getResource(User, params.id, response)
+    const user = (await this.getResource(User, params.id, response)) as User
     if (!user) return
+
+    if (this.checkIfAdmin(user, response)) {
+      return
+    }
 
     await user.delete()
     return response.status(200).json({ message: 'User successfully removed' })

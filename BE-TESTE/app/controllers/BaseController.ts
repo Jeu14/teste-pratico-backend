@@ -47,4 +47,28 @@ export default class BaseController {
       })
     }
   }
+
+  protected async checkIfExists(
+    modelClass: { query: () => any },
+    field: string,
+    value: any,
+    response: HttpContext['response']
+  ): Promise<boolean> {
+    const record = await modelClass.query().where(field, value).first()
+    if (record) {
+      response.status(409).json({ message: `${field} already exists` })
+      return true
+    }
+    return false
+  }
+
+  protected checkIfAdmin(resource: { role?: string }, response: HttpContext['response']): boolean {
+    if (resource.role === 'ADMIN') {
+      response.status(403).json({
+        message: 'Operation not allowed for ADMIN users',
+      })
+      return true
+    }
+    return false
+  }
 }
