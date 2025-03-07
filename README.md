@@ -9,22 +9,30 @@
 ```bash
  docker compose up --build
 ```
+
 - #### A execução deste comando resultará na construção (ou reconstrução) das imagens, configuração e criação dos containers para cada serviço definido, comunicação entre esses serviços e a execução das tarefas de inicialização presentes no entrypoint (execução das migrations e seeders, e inicia o server com live reload)
 
 ### **A aplicação ficará disponível em http://localhost:3333.**
 
-## OBSERVAÇÕES: 
-### - No endpoint de cadastro de compra, até mesmo as compras que falharem nos dois gateways serão registradas, com status de falha, obviamente. Essa escolha foi feita visando facilitar a obtenção de históricos dos clientes e possíveis auditorias.
+## OBSERVAÇÕES:
 
-### - Nos endpoints detalhamento de cliente e listagem de compras existem filtros de acordo com o status (SUCCESS ou FAILED), no parâmetro de rota. Caso nenhum filtro seja passado, todos os recursos serão retornados
+#### - No endpoint de cadastro de compra, até mesmo as compras que falharem nos dois gateways serão registradas, com status de falha, obviamente. Essa escolha foi feita visando facilitar a obtenção de históricos dos clientes e possíveis auditorias.
 
-### - Os gateways iniciais serão cadastrados no banco de dados através dos seeders que serão executados automaticamente após a inicialização do projeto, assim como o usuário (Admin) padrão
+#### - Nos endpoints detalhamento de cliente e listagem de compras existem filtros de acordo com o status (SUCCESS ou FAILED), no parâmetro de rota. Caso nenhum filtro seja passado, todos os recursos serão retornados
 
-### - Novos gateways poderão ser adicionados na pasta "Gateways" dentro da pasta "Services", e poderão ser chamados no arquivo Payment_service, sem a necessidade de alterar o controller. Após isso, basta apenas adicionar dentro do seeder referente aos gateways as informações do novo que será criado
+#### - Os gateways iniciais serão cadastrados no banco de dados através dos seeders que serão executados automaticamente após a inicialização do projeto, assim como o usuário (Admin) padrão
 
-### - Por medida de segurança, usuários com a role ADMIN não poderão ter seus dados alterados ou excluídos. Caso tente, cairá numa validação e o processo não será concluído.
+#### - Novos gateways poderão ser adicionados na pasta "Gateways" dentro da pasta "Services", e poderão ser chamados no arquivo Payment_service, sem a necessidade de alterar o controller. Após isso, basta apenas adicionar dentro do seeder referente aos gateways as informações do novo que será criado
 
-## Logo abaixo estão alguns exemplos de requisições que podem ser feitas nas rotas presentes no projeto.
+#### - Por medida de segurança, usuários com a role ADMIN não poderão ter seus dados alterados ou excluídos. Caso tente, cairá numa validação e o processo não será concluído.
+
+#### - Logo abaixo estão alguns exemplos de requisições que podem ser feitas nas rotas presentes no projeto.
+
+#### - Caso queira utilizar os testes implementados no projeto, após rodar o comando inicial acima, basta rodar o comando abaixo e os testes serão executados dentro do container docker:
+
+```bash
+ docker exec -it payment-app node ace test
+```
 
 ### `ATENÇÃO: Caso opte por não criar as rotas manualmente, basta copiar o arquivo (insomnia.json) e importá-lo no insomnia. Nele contém todas as rotas e exemplos de requisição.`
 
@@ -64,20 +72,20 @@ POST /transactions
 
 ```json
 {
-	"clientName": "client",
-	"clientEmail": "client@email.com",
-	"products": [
-		{
-			"id": 1,
-			"quantity": 2
-		},
-		{
-			"id": 2,
-			"quantity": 1
-		}
-	],
-	"cardNumber": "5569000000006063",
-	"cvv": "010"
+  "clientName": "client",
+  "clientEmail": "client@email.com",
+  "products": [
+    {
+      "id": 1,
+      "quantity": 2
+    },
+    {
+      "id": 2,
+      "quantity": 1
+    }
+  ],
+  "cardNumber": "5569000000006063",
+  "cvv": "010"
 }
 ```
 
